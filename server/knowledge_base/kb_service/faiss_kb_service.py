@@ -69,7 +69,7 @@ class FaissKBService(KBService):
                    **kwargs,
                    ) -> List[Dict]:
         data = self._docs_to_embeddings(docs) # 将向量化单独出来可以减少向量库的锁定时间
-
+        print(data)
         with self.load_vector_store().acquire() as vs:
             ids = vs.add_embeddings(text_embeddings=zip(data["texts"], data["embeddings"]),
                                     metadatas=data["metadatas"])

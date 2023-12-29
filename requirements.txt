@@ -41,13 +41,13 @@ vllm==0.2.2; sys_platform == "linux"
 
 # Online api libs dependencies
 
-# zhipuai>=1.0.7
-# dashscope>=1.10.0
-# qianfan>=0.2.0
-# volcengine>=1.0.106
-# pymilvus>=2.3.3
-# psycopg2
-# pgvector>=0.2.4
+zhipuai>=1.0.7
+dashscope>=1.10.0
+qianfan>=0.2.0
+volcengine>=1.0.106
+pymilvus>=2.3.3
+psycopg2
+pgvector>=0.2.4
 
 # Agent and Search Tools
 

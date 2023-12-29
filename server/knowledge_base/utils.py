@@ -1,4 +1,7 @@
 import os
+
+import chardet
+
 from configs import (
     KB_ROOT_PATH,
     CHUNK_SIZE,
@@ -19,7 +22,7 @@ from pathlib import Path
 from server.utils import run_in_thread_pool, get_model_worker_config
 import json
 from typing import List, Union,Dict, Tuple, Generator
-import chardet
+
 
 
 def validate_kb_name(knowledge_base_id: str) -> bool:

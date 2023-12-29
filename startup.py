@@ -105,8 +105,8 @@ def create_model_worker_app(log_level: str = "INFO", **kwargs) -> FastAPI:
         if kwargs["model_names"][0] in VLLM_MODEL_DICT and args.infer_turbo == "vllm":
             import fastchat.serve.vllm_worker
             from fastchat.serve.vllm_worker import VLLMWorker, app, worker_id
-            from vllm import AsyncLLMEngine
-            from vllm.engine.arg_utils import AsyncEngineArgs,EngineArgs
+            from langchain.vllm import AsyncLLMEngine
+            from langchain.vllm.engine.arg_utils import AsyncEngineArgs,EngineArgs
 
             args.tokenizer = args.model_path # 如果tokenizer与model_path不一致在此处添加
             args.tokenizer_mode = 'auto'
