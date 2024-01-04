@@ -7,7 +7,7 @@ import shutil
 
 # 是否显示详细日志
 log_verbose = True
-langchain.verbose = False
+langchain.verbose = True
 
 # 是否保存聊天记录
 SAVE_CHAT_HISTORY = False
