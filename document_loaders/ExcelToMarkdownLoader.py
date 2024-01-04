@@ -2,6 +2,7 @@ from pathlib import Path
 from pprint import pprint
 from typing import List
 
+from langchain.document_loaders import UnstructuredFileLoader
 from langchain.document_loaders.text import TextLoader
 from langchain_core.documents import Document
 
@@ -32,8 +33,11 @@ class ExcelToMarkdownLoader(TextLoader):
                     # 提取第一句话
                     first_sentence = get_first_line(first_column_text)
                     # 构建 Markdown 格式
-                    markdown_content += f"\n\n## {first_sentence}  "
-                    markdown_content += f"\n{first_column_text}  "
+                    markdown_content += f"## {first_sentence}\n\n"
+                    # 将文本按行拆分
+                    lines = first_column_text.split("\n")
+                    for line in lines:
+                        markdown_content += f"{line}\n\n"
 
             return markdown_content
 
@@ -45,4 +49,10 @@ class ExcelToMarkdownLoader(TextLoader):
 if __name__ == "__main__":
     loader = ExcelToMarkdownLoader(file_path=r"C:\Users\Dell\Desktop\ok卡帮助中心.xlsx")
     docs = loader.load()
-    pprint(docs)
+    # print(docs[0].page_content)
+
+    loader = UnstructuredFileLoader(file_path=r"C:\Users\Dell\Desktop\ok卡帮助中心21 md.txt")
+    docs = loader.load()
+    print(docs[0].page_content)
+
+
