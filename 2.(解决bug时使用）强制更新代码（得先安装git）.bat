@@ -9,15 +9,14 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
-REM 从远程仓库拉取最新内容并将本地分支重置到远程的 dev 分支
+echo 正在从远程仓库拉取最新内容并将本地分支重置到远程的 dev 分支...
 git fetch --all
 git reset --hard origin/dev
 
 REM 打印最新提交的信息
 echo 最新提交的信息：
-git log -1 --pretty=format:"%h - %s (%an, %ad)"
+git log -1
 
-REM 等待一段时间后关闭（示例中等待 10 秒）
-timeout /nobreak /t 10 > nul
-
-REM 最后输出一条消息
+echo 拉取完毕（如果没报错的话）.
+rem 保持命令提示符窗口打开
+cmd /k
