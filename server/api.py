@@ -144,6 +144,7 @@ def mount_app_routes(app: FastAPI, run_mode: str = None):
 
 def mount_knowledge_routes(app: FastAPI):
     from server.chat.knowledge_base_chat import knowledge_base_chat
+    from server.chat.knowledge_base_chat_offline import knowledge_base_chat_offline
     from server.chat.file_chat import upload_temp_docs, file_chat
     from server.chat.agent_chat import agent_chat
     from server.knowledge_base.kb_api import list_kbs, create_kb, delete_kb
@@ -154,6 +155,10 @@ def mount_knowledge_routes(app: FastAPI):
     app.post("/chat/knowledge_base_chat",
              tags=["Chat"],
              summary="与知识库对话")(knowledge_base_chat)
+
+    app.post("/chat/knowledge_base_chat_offline",
+             tags=["Chat"],
+             summary="与知识库对话(无LLM)")(knowledge_base_chat_offline)
 
     app.post("/chat/file_chat",
              tags=["Knowledge Base Management"],

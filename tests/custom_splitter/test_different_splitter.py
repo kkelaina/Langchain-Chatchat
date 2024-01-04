@@ -40,6 +40,9 @@ from langchain.docstore.document import Document
 @pytest.mark.parametrize("splitter_name",
                          [
                              "ChineseRecursiveTextSplitter",
+                             # "SpacyTextSplitter",
+                             # "RecursiveCharacterTextSplitter",
+                             # "MarkdownHeaderTextSplitter"
                          ])
 def test_different_splitter(splitter_name):
     try:

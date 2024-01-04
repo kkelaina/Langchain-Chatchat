@@ -97,7 +97,7 @@ LOADER_DICT = {"UnstructuredHTMLLoader": ['.html'],
                "RapidOCRLoader": ['.png', '.jpg', '.jpeg', '.bmp'],
                "UnstructuredEmailLoader": ['.eml', '.msg'],
                "UnstructuredEPubLoader": ['.epub'],
-               "UnstructuredExcelLoader": ['.xlsx', '.xlsd'],
+               "ExcelToMarkdownLoader": ['.xlsx', '.xlsd'],
                "NotebookLoader": ['.ipynb'],
                "UnstructuredODTLoader": ['.odt'],
                "PythonLoader": ['.py'],
@@ -149,7 +149,7 @@ def get_loader(loader_name: str, file_path: str, loader_kwargs: Dict = None):
     '''
     loader_kwargs = loader_kwargs or {}
     try:
-        if loader_name in ["RapidOCRPDFLoader", "RapidOCRLoader","FilteredCSVLoader"]:
+        if loader_name in ["RapidOCRPDFLoader", "RapidOCRLoader", "FilteredCSVLoader", "ExcelToMarkdownLoader"]:
             document_loaders_module = importlib.import_module('document_loaders')
         else:
             document_loaders_module = importlib.import_module('langchain.document_loaders')
@@ -401,8 +401,8 @@ if __name__ == "__main__":
     from pprint import pprint
 
     kb_file = KnowledgeFile(
-        filename="/home/congyin/Code/Project_Langchain_0814/Langchain-Chatchat/knowledge_base/csv1/content/gm.csv",
-        knowledge_base_name="samples")
-    # kb_file.text_splitter_name = "RecursiveCharacterTextSplitter"
-    docs = kb_file.file2docs()
-    # pprint(docs[-1])
+        filename=r"C:\Users\Dell\Desktop\ok卡帮助中心.xlsx",
+        knowledge_base_name="okcard")
+    kb_file.text_splitter_name = "MarkdownHeaderTextSplitter"
+    docs = kb_file.file2text()
+    pprint(docs)

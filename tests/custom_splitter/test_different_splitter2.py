@@ -15,11 +15,10 @@ def text(splitter_name):
     from langchain import document_loaders
 
     # 使用DocumentLoader读取文件
-    filepath = "../../knowledge_base/okcard/content/ok卡帮助中心.md"
-    loader = document_loaders.UnstructuredFileLoader(filepath, autodetect_encoding=True)
+    filepath = r"C:\Users\Dell\Desktop\ok卡帮助中心.xlsx"
+    loader = document_loaders.UnstructuredExcelLoader(filepath, autodetect_encoding=True)
     docs = loader.load()
     text_splitter = make_text_splitter(splitter_name, CHUNK_SIZE, OVERLAP_SIZE)
-    pprint(text_splitter)
     if splitter_name == "MarkdownHeaderTextSplitter":
         docs = text_splitter.split_text(docs[0].page_content)
         for doc in docs:

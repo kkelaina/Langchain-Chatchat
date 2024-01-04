@@ -43,7 +43,7 @@ ONLINE_LLM_MODEL = {
     # 阿里云通义千问 API，文档参考 https://help.aliyun.com/zh/dashscope/developer-reference/api-details
     "qwen-api": {
         "version": "qwen-turbo",  # 可选包括 "qwen-turbo", "qwen-plus"
-        "api_key": "",  # 请在阿里云控制台模型服务灵积API-KEY管理页面创建
+        "api_key": "sk-4fd540dd274a40fb9e528aec2635d5b9",  # 请在阿里云控制台模型服务灵积API-KEY管理页面创建
         "provider": "QwenWorker",
     },
 

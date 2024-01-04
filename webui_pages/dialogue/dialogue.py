@@ -131,13 +131,14 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
         def on_mode_change():
             mode = st.session_state.dialogue_mode
             text = f"已切换到 {mode} 模式。"
-            if mode == "知识库问答":
+            if mode == "知识库问答" or "知识库问答(无LLM)":
                 cur_kb = st.session_state.get("selected_kb")
                 if cur_kb:
                     text = f"{text} 当前知识库： `{cur_kb}`。"
             st.toast(text)
 
-        dialogue_modes = ["LLM 对话",
+        dialogue_modes = ["知识库问答(无LLM)",
+                        "LLM 对话",
                         "知识库问答",
                         "文件对话",
                         "搜索引擎问答",
@@ -206,6 +207,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             "搜索引擎问答": "search_engine_chat",
             "知识库问答": "knowledge_base_chat",
             "文件对话": "knowledge_base_chat",
+            "知识库问答(无LLM)": "knowledge_base_chat",
         }
         prompt_templates_kb_list = list(PROMPT_TEMPLATES[index_prompt[dialogue_mode]].keys())
         prompt_template_name = prompt_templates_kb_list[0]
@@ -231,6 +233,23 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
             st.toast(f"已加载知识库： {st.session_state.selected_kb}")
 
         if dialogue_mode == "知识库问答":
+            with st.expander("知识库配置", True):
+                kb_list = api.list_knowledge_bases()
+                index = 0
+                if DEFAULT_KNOWLEDGE_BASE in kb_list:
+                    index = kb_list.index(DEFAULT_KNOWLEDGE_BASE)
+                selected_kb = st.selectbox(
+                    "请选择知识库：",
+                    kb_list,
+                    index=index,
+                    on_change=on_kb_change,
+                    key="selected_kb",
+                )
+                kb_top_k = st.number_input("匹配知识条数：", 1, 20, VECTOR_SEARCH_TOP_K)
+
+                ## Bge 模型会超过1
+                score_threshold = st.slider("知识匹配分数阈值：", 0.0, 2.0, float(SCORE_THRESHOLD), 0.01)
+        elif dialogue_mode == "知识库问答(无LLM)":
             with st.expander("知识库配置", True):
                 kb_list = api.list_knowledge_bases()
                 index = 0
@@ -373,6 +392,27 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                 ])
                 text = ""
                 for d in api.knowledge_base_chat(prompt,
+                                                knowledge_base_name=selected_kb,
+                                                top_k=kb_top_k,
+                                                score_threshold=score_threshold,
+                                                history=history,
+                                                model=llm_model,
+                                                prompt_name=prompt_template_name,
+                                                temperature=temperature):
+                    if error_msg := check_error_msg(d):  # check whether error occured
+                        st.error(error_msg)
+                    elif chunk := d.get("answer"):
+                        text += chunk
+                        chat_box.update_msg(text, element_index=0)
+                chat_box.update_msg(text, element_index=0, streaming=False)
+                chat_box.update_msg("\n\n".join(d.get("docs", [])), element_index=1, streaming=False)
+            elif dialogue_mode == "知识库问答(无LLM)":
+                chat_box.ai_say([
+                    f"正在查询知识库 `{selected_kb}` ...",
+                    Markdown("...", in_expander=True, title="知识库匹配结果", state="complete"),
+                ])
+                text = ""
+                for d in api.knowledge_base_chat_offline(prompt,
                                                 knowledge_base_name=selected_kb,
                                                 top_k=kb_top_k,
                                                 score_threshold=score_threshold,

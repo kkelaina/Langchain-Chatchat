@@ -389,6 +389,45 @@ class ApiRequest:
         )
         return self._httpx_stream2generator(response, as_json=True)
 
+    def knowledge_base_chat_offline(
+        self,
+        query: str,
+        knowledge_base_name: str,
+        top_k: int = VECTOR_SEARCH_TOP_K,
+        score_threshold: float = SCORE_THRESHOLD,
+        history: List[Dict] = [],
+        stream: bool = True,
+        model: str = LLM_MODELS[0],
+        temperature: float = TEMPERATURE,
+        max_tokens: int = None,
+        prompt_name: str = "default",
+    ):
+        '''
+        对应api.py/chat/knowledge_base_chat_offline接口
+        '''
+        data = {
+            "query": query,
+            "knowledge_base_name": knowledge_base_name,
+            "top_k": top_k,
+            "score_threshold": score_threshold,
+            "history": history,
+            "stream": stream,
+            "model_name": model,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "prompt_name": prompt_name,
+        }
+
+        # print(f"received input message:")
+        # pprint(data)
+
+        response = self.post(
+            "/chat/knowledge_base_chat_offline",
+            json=data,
+            stream=True,
+        )
+        return self._httpx_stream2generator(response, as_json=True)
+
     def upload_temp_docs(
         self,
         files: List[Union[str, Path, bytes]],

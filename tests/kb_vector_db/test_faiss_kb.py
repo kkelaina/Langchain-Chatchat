@@ -5,9 +5,9 @@ from server.knowledge_base.migrate import create_tables
 from server.knowledge_base.utils import KnowledgeFile
 
 
-kbService = FaissKBService("test")
-test_kb_name = "test"
-test_file_name = "ok卡帮助中心 md.txt"
+kbService = FaissKBService("okcard")
+test_kb_name = "okcard"
+test_file_name = "ok卡帮助中心.xlsx"
 testKnowledgeFile = KnowledgeFile(test_file_name, test_kb_name)
 search_content = "怎么买卡"
 
