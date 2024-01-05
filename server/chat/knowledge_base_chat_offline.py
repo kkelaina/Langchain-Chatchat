@@ -92,7 +92,7 @@ async def knowledge_base_chat_offline(query: str = Body(..., description="用户
         if not source_documents:
             not_found_message = "<span style='color:red'>未找到相关文档</span>"
             source_documents.append(not_found_message)
-            answer = not_found_message
+            answer = "您好，为了更好地帮助您，请提供更详细的信息，这样我可以更准确地回答您的问题。谢谢！"
         else:
             answer = docs[0].page_content
 
